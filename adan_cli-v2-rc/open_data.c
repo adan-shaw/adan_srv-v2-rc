@@ -7,9 +7,6 @@
 #include "comm_list.h"
 #include "static_val.h"
 
-//部分长定字符串
-const char *uinfo_sclean = "call uinfo_clean ();";
-const char *upicture_sclean = "call upicture_clean ();";
 
 //解析数据帧
 //
