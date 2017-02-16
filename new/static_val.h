@@ -15,16 +15,16 @@
 //全局变量
 struct static_val{
   unsigned int exit_sig;	//退出标志
-	   int test_count;	//互交次数总累加
-	   int err_count;	//互交错误总累加
-	   short int srv_sig;	//服务器状态标志--启动/停止
+	       int test_count;	//互交次数总累加
+	       int err_count;	//互交错误总累加
+	 short int srv_sig;	    //服务器状态标志--启动/停止
   //监听模块
-	   int sfd_li;		//监听socket
+	       int sfd_li;		//监听socket
   unsigned int pid_li;		//监听线程PID
   unsigned int err_li;		//监听线程错误
   //epoll 模块
-	   int epoll_fd;
-	   int cur_fds;		//epoll 中的fd 计数
+	       int epoll_fd;
+	       int cur_fds;		//epoll 中的fd 计数
   //recv任务队列
   void* pm_recv;
   //
@@ -32,9 +32,9 @@ struct static_val{
   unsigned int pid_io[pool_max];		//线程的PID
   unsigned int test_io[pool_max];		//线程的服务次数累加
   unsigned int err_io[pool_max];		//线程的错误次数累加
-  pthread_cond_t cond_io[pool_max];	//线程的同步条件变量
+  pthread_cond_t cond_io[pool_max];	    //线程的同步条件变量
   pthread_mutex_t mutex_io[pool_max];	//线程的同步锁
-  short int sig_io[pool_max];		//线程的状态表示-正在使用=+1 | 闲=0(减少冲突)
+     short int sig_io[pool_max];		//线程的状态表示-正在使用=+1 | 闲=0(减少冲突)
   //创建线程组时用到的临时变量
   int pid_tmp;
   pthread_cond_t tmp_cond;

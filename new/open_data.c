@@ -43,7 +43,19 @@ redisReply* do_Tuser(struct static_val *s_val,char* comm)
 	return reply;
 }
 */
-//hash !!
+//hash !!只要传递struct static_val *s_val, struct data_frame* pdata_frame,
+//就可以操作redis db 了, 然后再在初始化的时候添加一个模块: 读取文件到redis 中, 那么->
+//1.可以改造成专用文件服务器, 需要客户端上传
+//2.卸载加密模块, 添加HTTP 解析模块, 可以做个简易的HTTP 服务器(HTML 文件下载机)
+//3.可以做一个小型系统如果只是负责记账或者一些简单业务的话...
+//  但是注意: 4.如果需要抵抗潮水攻击需要添加首包验证, 5.如果需要做业务需要添加日志系统,
+//           6.如果需要做长链接服务器, 除了要添加心跳包之外, 还要对整个收发过程进行整改
+//           这里的收发流程是以socket fd 为消费品的模式进行高性能剪切的,
+//           长链接就意味着socket 不能是消费品, 这样就需要重构--甚至是整个架构重写
+//           7.如果需要更高的安全性, 请重写传输加密和离线比对数模块
+//           8.如果需要修改socket IO 过程, 以提供更稳定更高效的socket 传输, 可以尝试TTCP
+//           就是不链接, 不用connect(), 直接用recvfrom or sendto 进行通信（未知-未实践成功过）
+//			 9.client 只是一个测试客户端, 如果需要做业务, 请自行修改或重写新的客户端
 //
 int open_data(struct static_val *s_val, int sock_tmp, struct data_frame* pdata_frame,int lcode)
 { int re_val;			//解析数据后分辨客户端选择的请求，这里保存辨析，以返回
@@ -126,7 +138,7 @@ int open_data(struct static_val *s_val, int sock_tmp, struct data_frame* pdata_f
   //处理结果集--暂时都没有统一做数据库结果集处理
   memset(pdata_frame,0,sizeof(struct data_frame));
   pdata_frame->comm = re_val;
-  pdata_frame->u_backup = lcode;
+  pdata_frame->u_backup = lcode;//赋予离线比对值
   return re_val;//返回正确操作
 }
 

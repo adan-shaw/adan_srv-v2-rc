@@ -18,27 +18,29 @@ int recv_once(struct static_val *s_val, int _pid, int sock_tmp)
 { //客户端IO 临时变量
   int data_size;
   struct data_frame buf;
-  int lcode = get_lencode();
+  int lcode = get_lencode();//获取离线比对数
   //接收数据--epoll 水平触发,这里本来就已经recv 完毕,一次recv 肯定能马上获取全部数据
   //因为已经被提出了epoll, 所以这里用非异步接收, 保证数据接受安全性--其实MSG_DONTWAIT 也是可以的
   memset(&buf,0,sizeof(struct data_frame));
   data_size = recv(sock_tmp, &buf, sizeof(struct data_frame), MSG_DONTWAIT);
-  if(data_size < 0)//接收数据错误?
-    { printf("io pthread.%d socket %d recv an data from client fail, errno:%d\n",_pid,sock_tmp,errno);return -1; }
-  //解密数据
-  encode_open(&buf);
+  if(data_size < 0)//接收数据错误
+    { printf("io pthread.%d ->socket %d recv an data from client fail, errno:%d\n",_pid,sock_tmp,errno);return -1; }
+  if(data_size < 0)//传输时客户端已经关闭
+    { printf("client has close when io pthread.%d ->socket %d Receive client data, errno:%d\n",_pid,sock_tmp,errno);return -1; }
+  //正确接受数据则
+  encode_open(&buf);//解密数据
   //显示收到的数据
   printf("io pthread.%d recv '%d-%d-%d-%s-%s-%d-%d-%d-%d-%d-%s-%s' from client\n",_pid,buf.encode,buf.comm,buf.uid,buf.uname,buf.upw,buf.ip,buf.age,buf.sex,buf.port,buf.u_backup,buf.s_backup,buf.buf);
   //*********************************************
   //open data 解析数据报
   if(buf.u_backup != lcode)
-	{printf("recv a timeout data or it's a attack from somewhere\n"); s_val->err_count++;return 0;}
+	{ printf("recv a timeout data or it's a attack from somewhere\n"); s_val->err_count++;return 0;}
   int tmp;
   tmp = open_data(s_val,_pid,&buf,lcode);//无论查询结果如何，直接交给pickup_data
 
   //pickup data 打包结果回发
   if(pickup_data(s_val,sock_tmp,&buf) == -1)
-    { printf("re_send data fail, once touch error, unknow server fail\n");return -1; }
+    { printf("re_send data to client fail, once touch error, unknow error\n");return -1; }
 
   return 0;//正确返回
 }
