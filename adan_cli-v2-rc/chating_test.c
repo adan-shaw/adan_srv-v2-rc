@@ -7,19 +7,17 @@
 
 #include "static_val.h"
 
-
-void send_msg(void)
+void send_msg (void)
 {
-	return ;
+	return;
 }
 
-void chat_record(void)
+void chat_record (void)
 {
-	return ;
+	return;
 }
 
-
-void unlockid_exit(void)
+void unlockid_exit (void)
 {
-	return ;
+	return;
 }

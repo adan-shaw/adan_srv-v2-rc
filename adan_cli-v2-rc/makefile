@@ -2,7 +2,7 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
--include ../makefile.init
+-include ./makefile.init
 
 RM := rm -rf
 
@@ -17,7 +17,7 @@ ifneq ($(strip $(C_DEPS)),)
 endif
 endif
 
--include ../makefile.defs
+-include ./makefile.defs
 
 # Add inputs and outputs from these tool invocations to the build variables 
 
@@ -40,4 +40,4 @@ clean:
 .PHONY: all clean dependents
 .SECONDARY:
 
--include ../makefile.targets
+-include ./makefile.targets
